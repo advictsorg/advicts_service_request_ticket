@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sr_approval_category" model="ir.module.category">
+        <field name="name">Service Request</field>
+        <field name="description">Category for Service Request</field>
+    </record>
+    <record id="sr_delivery_group" model="res.groups">
+        <field name="name">SR Delivery Notification</field>
+        <field name="category_id" ref="sr_approval_category"/>
+    </record>
+
+    <record id="sr_ws_group" model="res.groups">
+        <field name="name">SR Wholsale</field>
+        <field name="category_id" ref="sr_approval_category"/>
+    </record>
+    <record id="sr_cts_group" model="res.groups">
+        <field name="name">SR CTS</field>
+        <field name="category_id" ref="sr_approval_category"/>
+    </record>
+    <record id="sr_legal_group" model="res.groups">
+        <field name="name">SR Legal</field>
+        <field name="category_id" ref="sr_approval_category"/>
+    </record>
+
+</odoo>

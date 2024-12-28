@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Root Menu-->
+        <record id="service_request_action" model="ir.actions.act_window">
+            <field name="name">Service Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_mode">kanban,tree,form,calendar,activity</field>
+            <field name="context">{'default_request_type': 'request'}</field>
+            <field name="domain">[('request_type','=','request')]</field>
+        </record>
+        <record id="change_service_request_action" model="ir.actions.act_window">
+            <field name="name">Change Service Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_mode">kanban,tree,form,calendar,activity</field>
+            <field name="context">{'default_request_type': 'change_request'}</field>
+            <field name="domain">[('request_type','=','change_request')]</field>
+        </record>
+        <record id="action_dem_device" model="ir.actions.act_window">
+            <field name="name">Demarcation Devices</field>
+            <field name="res_model">dem.device</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="action_customer_type" model="ir.actions.act_window">
+            <field name="name">Customer Types</field>
+            <field name="res_model">service.customer.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <record id="action_connection_type" model="ir.actions.act_window">
+            <field name="name">Connection Types</field>
+            <field name="res_model">service.connection.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+
+        <record id="action_sr_survey_template" model="ir.actions.act_window">
+            <field name="name">Survey Templates</field>
+            <field name="res_model">sr.survey.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_service_request_type" model="ir.actions.act_window">
+            <field name="name">Service Request Types</field>
+            <field name="res_model">service.request.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_service_request_type_tree"/>
+        </record>
+        <menuitem name="SR Management" id="menu_sr_root" sequence="0"
+                  web_icon="advicts_service_request_ticket,static/description/icon.png"/>
+
+        <menuitem id="menu_service_request" name="Service Requests" parent="menu_sr_root"
+                  sequence="1" action="service_request_action"/>
+
+        <menuitem id="menu_change_service_request" name="Change Service Requests" parent="menu_sr_root"
+                  sequence="2" action="change_service_request_action"/>
+
+        <menuitem id="menu_service_request_config" name="Configuration" parent="menu_sr_root"
+                  sequence="50"/>
+
+        <menuitem id="menu_dem_device"
+                  name="Demarcation Devices"
+                  parent="menu_service_request_config"
+                  action="action_dem_device"
+                  sequence="2"/>
+        <menuitem id="menu_customer_type"
+                  name="Customer Type"
+                  parent="menu_service_request_config"
+                  action="action_customer_type"
+                  sequence="6"/>
+        <menuitem id="menu_connection_type"
+                  name="Connection Type"
+                  parent="menu_service_request_config"
+                  action="action_connection_type"
+                  sequence="8"/>
+
+        <menuitem id="menu_sr_survey_template"
+                  name="Survey Templates"
+                  parent="menu_service_request_config"
+                  action="action_sr_survey_template"
+                  sequence="3"/>
+        <menuitem id="menu_service_request_type" name="Service Request Types" parent="menu_service_request_config"
+                  action="action_service_request_type" sequence="4"/>
+    </data>
+</odoo>

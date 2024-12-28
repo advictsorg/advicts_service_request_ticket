@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_sr_survey_template_tree" model="ir.ui.view">
+            <field name="name">sr.survey.template.tree</field>
+            <field name="model">sr.survey.template</field>
+            <field name="arch" type="xml">
+                <tree string="Survey Templates">
+                    <field name="name"/>
+                    <field name="team_id"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_sr_survey_template_form" model="ir.ui.view">
+            <field name="name">sr.survey.template.form</field>
+            <field name="model">sr.survey.template</field>
+            <field name="arch" type="xml">
+                <form string="Survey Template">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="desc"/>
+                            <field name="team_id"/>
+                            <field name="is_active"/>
+                        </group>
+                        <notebook>
+                            <page string="Template Lines">
+                                <field name="template_lines">
+                                    <tree editable="bottom">
+                                        <field name="question"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_sr_survey_tree" model="ir.ui.view">
+            <field name="name">sr.survey.tree</field>
+            <field name="model">sr.survey</field>
+            <field name="arch" type="xml">
+                <tree string="Surveys">
+                    <field name="name"/>
+                    <field name="team_id"/>
+                    <field name="service_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_sr_survey_form" model="ir.ui.view">
+            <field name="name">sr.survey.form</field>
+            <field name="model">sr.survey</field>
+            <field name="arch" type="xml">
+                <form string="Survey">
+                    <header>
+                        <field name="stage" widget="statusbar"/>
+                        <button name="in_progress" type="object" string="In Progress"
+                                invisible="stage != 'draft'"
+                                class="btn btn-primary"/>
+                        <button name="done" type="object" string="Done"
+                                invisible="stage != 'in_progress'"
+                                class="btn btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="desc"/>
+                            <field name="team_id"/>
+                            <field name="service_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Survey Lines">
+                                <field name="template_lines">
+                                    <tree editable="bottom">
+                                        <field name="question"/>
+                                        <field name="Answer"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_dem_device_tree" model="ir.ui.view">
+            <field name="name">dem.device.tree</field>
+            <field name="model">dem.device</field>
+            <field name="arch" type="xml">
+                <tree string="Demarcation Devices" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_service_connection_type_tree" model="ir.ui.view">
+            <field name="name">service.connection.type.tree</field>
+            <field name="model">service.connection.type</field>
+            <field name="arch" type="xml">
+                <tree string="Connection Types" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_customer_type_tree" model="ir.ui.view">
+            <field name="name">service.customer.type.tree</field>
+            <field name="model">service.customer.type</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Type" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_service_request_type_tree" model="ir.ui.view">
+        <field name="name">service.request.type.tree</field>
+        <field name="model">service.request.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_service_request_type_form" model="ir.ui.view">
+        <field name="name">service.request.type.form</field>
+        <field name="model">service.request.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="prefix"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    </data>
+</odoo>

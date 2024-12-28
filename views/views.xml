@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_res_partner_form_inherit_service_request" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.service.request</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="customer_type"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_crm_lead_form_inherit_service_request" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.service.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <sheet>
+                <notebook position="inside">
+                    <page string="Service Requests">
+                        <field name="service_request_ids" context="{'form_view_ref': 'advicts_service_request_ticket.service_request_view_form','default_crm_id': id,'request_type':'request','partner_id':partner_id.id}">
+                            <tree>
+                                <field name="name"/>
+                                <field name="connection_id"/>
+                                <field name="request_type_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="service_request_view_form" model="ir.ui.view">
+            <field name="name">service.request.view.form</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="request_type" invisible="1"/>
+                        <field name="stage" widget="statusbar"
+                               statusbar_visible="draft,operation_process,service_recovery,review,done"/>
+
+                        <button name="submit" type="object" string="Submit"
+                                invisible="stage != 'draft'" class="btn btn-primary"/>
+
+                        <button name="next_to_select_department" type="object" string="Next to select department"
+                                invisible="stage != 'ws_request'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_survey" type="object" string="Next to survey"
+                                invisible="stage != 'select_department'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_avail_confirm" type="object" string="Next to avail confirm"
+                                invisible="stage != 'survey'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_ws_discuss" type="object" string="Next to ws discuss"
+                                invisible="stage != 'avail_confirm'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_contract_draft" type="object" string="Next to contract draft"
+                                invisible="stage != 'ws_discuss'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_contract_sign" type="object" string="Next to contract sign"
+                                invisible="stage != 'contract_draft'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_service_delivery" type="object" string="Next to service delivery"
+                                invisible="stage != 'contract_sign'"
+                                class="btn btn-primary"/>
+                        <button name="next_to_service_activate" type="object" string="Next to service activate"
+                                invisible="stage != 'service_delivery'"
+                                class="btn btn-primary"/>
+
+                        <button name="done" type="object" string="Done"
+                                invisible="stage != 'service_activate'"
+                                class="btn btn-primary"/>
+
+                        <button name="send_back" type="object" string="Send Back"
+                                invisible="stage in ('draft','cancel','done','reject')"
+                                class="btn btn-secondary"/>
+
+                        <button name="reject" type="object" string="Reject"
+                                invisible="stage in ('draft','cancel','done','reject')"
+                                class="btn btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <field name="survey_count" invisible="1"/>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_surveys"
+                                    icon="fa-star-half-o" invisible="not survey_count">
+                                <field name="survey_count" string='Survey' widget="statinfo"/>
+                            </button>
+                            <button name="action_view_change_requests" type="object" class="oe_stat_button"
+                                    icon="fa-exchange" invisible="request_type != 'request'">
+                                <field name="change_request_count" widget="statinfo" string="Changes"/>
+                            </button>
+
+                            <button name="action_view_tickets" type="object" class="oe_stat_button"
+                                    icon="fa-ticket">
+                                <field name="ticket_count" widget="statinfo" string="Tickets"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Done" bg_color="text-bg-success"
+                                invisible="stage != 'done'"/>
+                        <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger"
+                                invisible="stage != 'reject'"/>
+                        <widget name="web_ribbon" title="Canceled" bg_color="text-bg-info"
+                                invisible="stage != 'cancel'"/>
+
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <div class="oe_title">
+                            <span class="o_form_label" invisible="request_type != 'request'">Service Name</span>
+                            <span class="o_form_label" invisible="request_type != 'change_request'">Change Service
+                                Name
+                            </span>
+                            <h1>
+                                <field name="service_name" placeholder="Internet Service"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Information">
+                                <field name="create_uid" widget="many2one_avatar_user" readonly="1"/>
+                                <field name="partner_id" widget="many2one_avatar_user"
+                                       invisible="request_type != 'request'" required="request_type == 'request'"/>
+                                <field name="poc_partner_id" widget="many2one_avatar_user"
+                                       invisible="request_type != 'request'" context="{'parent_id':partner_id.id}"/>
+                                <field name="connection_id"/>
+                                <field name="request_type_id"/>
+                                <field name="team_ids" required="stage == 'select_department'"/>
+                            </group>
+                            <group invisible="request_type != 'request'">
+                                <field name="dem_device"/>
+                                <field name="dem_port_vlan"/>
+                                <field name="connection_type"/>
+                                <field name="interface_name"/>
+                                <field name="prtg_sensor"/>
+                                <field name="ip_address"/>
+                                <field name="status"/>
+                                <field name="active_date"/>
+                            </group>
+                            <group invisible="request_type != 'change_request'">
+                                <field name="change_request_type" required="request_type == 'change_request'"/>
+                                <field name="connection" required="request_type == 'change_request'"/>
+                                <field name="connection_partner_id"/>
+                                <field name="connection_qos_download"/>
+                                <field name="connection_qos_upload"/>
+                                <field name="connection_ip_address"/>
+                                <field name="connection_status"/>
+                                <field name="poc_name"/>
+                                <field name="poc_number"/>
+                            </group>
+                            <group>
+                                <field name="qos_upload"/>
+                                <field name="qos_download"/>
+                                <field name="drafted_contract" widget="file" required="stage == 'contract_draft'"/>
+                                <field name="signed_contract" widget="file" required="stage == 'contract_sign'"/>
+                            </group>
+
+
+                        </group>
+                        <notebook>
+                            <page string="Other Info" name="other_info">
+                                <field name="description" placeholder="Description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="service_request_view_kanban" model="ir.ui.view">
+            <field name="name">service.request.view.kanban</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban" default_order="stage" records_draggable="false"
+                        sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="stage"/>
+                    <field name="active_date"/>
+                    <field name="create_uid"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click"
+                                 style="margin:8px;padding:0px;height:auto;min-height:115px !important;">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-5" style="width:110px;height:115px">
+                                            <div class="text-bg-primary"
+                                                 style="text-align:center;vertical-align:middle;font-size:12px;margin-bottom:3px;padding:5px;">
+                                                Creation Date
+                                                <br/>
+                                                <div>
+                                                    <br/>
+                                                </div>
+                                                <div>
+                                                    <field name="create_date"/>
+                                                </div>
+                                                <div>
+                                                    <br/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-7" style="padding-left:0px;">
+                                            <strong>
+                                                <field name="name" class="text-primary"
+                                                       style="font-size: 16px;"/>
+                                            </strong>
+                                            <hr style="margin-top:2px;margin-bottom:2px;"/>
+                                            <strong>
+                                                <field name="service_name"
+                                                       style="font-size: 15px;"/>
+                                            </strong>
+                                            <hr style="margin-top:2px;margin-bottom:2px;"/>
+                                            <div>
+                                                <field name="stage" widget="badge"
+                                                       decoration-success="stage == 'done'"
+                                                       decoration-danger="stage == 'cancel'"
+                                                       decoration-warning="stage == 'reject'"
+                                                />
+                                            </div>
+                                            <hr style="margin-top:2px;margin-bottom:2px;"/>
+                                            <div class="o_kanban_record_bottom">
+                                                <div class="oe_kanban_bottom_left">
+                                                    <field name="activity_ids"
+                                                           widget="kanban_activity"/>
+                                                    Schedule
+                                                    Activity
+                                                </div>
+                                                <div class="oe_kanban_bottom_right">
+                                                    <field name="create_uid"
+                                                           widget="many2one_avatar_user"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="service_request_view_tree" model="ir.ui.view">
+            <field name="name">service.request.view.tree</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="service_name"/>
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
+                    <field name="stage" widget="badge"
+                           decoration-success="stage == 'done'"
+                           decoration-danger="stage == 'cancel'"
+                           decoration-warning="stage == 'reject'"
+                    />
+                </tree>
+            </field>
+        </record>
+        <record id="service_request_view_calendar" model="ir.ui.view">
+            <field name="name">service.request.view.calendar</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <calendar string="Service Request" date_start="create_date" color="stage"
+                          mode="month"
+                          quick_create="False"
+                          hide_time="True" event_open_popup="True">
+                    <field name="create_date"/>
+                    <field name="stage" filters="1"/>
+                    <field name="create_uid" filters="1"/>
+                </calendar>
+            </field>
+        </record>
+        <record id="service_request_view_search" model="ir.ui.view">
+            <field name="name">service.request.view.search</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Name"/>
+                    <field name="service_name" string="Request Name"/>
+                    <field name="create_date"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter string="Stage" name="group_by_tender_type"
+                                context="{'group_by': 'stage'}"/>
+                        <separator/>
+                        <filter string="Create Date" name="group_by_date"
+                                context="{'group_by': 'create_date'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="stage" string="Stage" enable_counters="1" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>
