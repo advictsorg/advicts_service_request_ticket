@@ -64,12 +64,13 @@
             <field name="arch" type="xml">
                 <form string="Survey">
                     <header>
+                        <field name="is_team_lead" invisible="1"/>
                         <field name="stage" widget="statusbar"/>
-                        <button name="in_progress" type="object" string="In Progress"
+                        <button name="in_progress" type="object" string="Send To Team Head"
                                 invisible="stage != 'draft'"
                                 class="btn btn-primary"/>
-                        <button name="done" type="object" string="Done"
-                                invisible="stage != 'in_progress'"
+                        <button name="done" type="object" string="Approve"
+                                invisible="stage != 'in_progress' or not is_team_lead"
                                 class="btn btn-primary"/>
                     </header>
                     <sheet>

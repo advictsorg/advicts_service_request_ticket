@@ -32,8 +32,11 @@
                         <button name="next_to_contract_sign" type="object" string="Next to contract sign"
                                 invisible="stage != 'contract_draft'"
                                 class="btn btn-primary"/>
-                        <button name="next_to_service_delivery" type="object" string="Next to service delivery"
+                        <button name="next_to_wh_manager" type="object" string="Next to Wholesale Manager"
                                 invisible="stage != 'contract_sign'"
+                                class="btn btn-primary" groups="advicts_service_request_ticket.sr_ws_manager_group"/>
+                        <button name="next_to_service_delivery" type="object" string="Next to service delivery"
+                                invisible="stage != 'wh_manager'"
                                 class="btn btn-primary"/>
                         <button name="next_to_service_activate" type="object" string="Next to service activate"
                                 invisible="stage != 'service_delivery'"
@@ -95,7 +98,9 @@
                                 <field name="poc_partner_id" widget="many2one_avatar_user"
                                        invisible="request_type != 'request'" context="{'parent_id':partner_id.id}"/>
                                 <field name="connection_id"/>
-                                <field name="request_type_id"/>
+
+                                <field name="back_reason" invisible="1"/>
+                                <field name="back_reason" invisible="not back_reason" readonly="1"/>
                                 <field name="team_ids" required="stage == 'select_department'"/>
                             </group>
                             <group invisible="request_type != 'request'">

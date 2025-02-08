@@ -8,3 +8,5 @@ advicts_service_request_ticket.access_sr_survey_line,sr.survey.line,advicts_serv
 advicts_service_request_ticket.access_sr_request_type,service.request.type,advicts_service_request_ticket.model_service_request_type,base.group_user,1,1,1,1
 advicts_service_request_ticket.access_service_customer_type,service.customer.type,advicts_service_request_ticket.model_service_customer_type,base.group_user,1,1,1,1
 advicts_service_request_ticket.access_service_connection_type,service.connection.type,advicts_service_request_ticket.model_service_connection_type,base.group_user,1,1,1,1
+advicts_service_request_ticket.access_service_sr_back_reason,sr.back.reason,advicts_service_request_ticket.model_sr_back_reason,base.group_user,1,1,1,1
+

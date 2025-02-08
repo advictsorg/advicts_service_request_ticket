@@ -22,6 +22,7 @@
         'data/sequence.xml',
 
         # Views
+        'views/wizard.xml',
         'views/views.xml',
         'views/service_request.xml',
         'views/helpdesk.xml',

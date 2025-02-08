@@ -60,12 +60,28 @@ class SrSurvey(models.Model):
     template_lines = fields.One2many('sr.survey.line', 'survey_id', 'Survey Lines')
     service_id = fields.Many2one('service.request', string="Service Request")
     stage = fields.Selection([('draft', 'New'),
-                              ('in_progress', 'In Progress'),
+                              ('in_progress', 'Team Head Approval'),
                               ('done', 'Done'),
                               ],
                              tracking=True,
                              default='draft')
     is_done = fields.Boolean(compute='_compute_is_done', store=True)
+    is_team_lead = fields.Boolean(compute='_compute_is_team_lead')
+    is_team_member = fields.Boolean(compute='_compute_is_team_member')
+
+    def _compute_is_team_lead(self):
+        for rec in self:
+            if rec.team_id.team_head.id == self.env.user.id:
+                rec.is_team_lead = True
+            else:
+                rec.is_team_lead = False
+
+    def _compute_is_team_member(self):
+        for rec in self:
+            if self.env.user.id in rec.team_id.team_members.ids:
+                rec.is_team_member = True
+            else:
+                rec.is_team_member = False
 
     @api.depends('stage')
     def _compute_is_done(self):
@@ -77,30 +93,40 @@ class SrSurvey(models.Model):
 
     def in_progress(self):
         for rec in self:
+            for line in rec.template_lines:
+                if not line.Answer:
+                    raise ValidationError(_("You must answer all the questions."))
+
             rec.stage = 'in_progress'
+            rec._create_auto_activity(not_user_id=rec.team_id.team_head, title='Survey Need Approval')
 
     def done(self):
         for rec in self:
             rec.stage = 'done'
-            rec._create_auto_activity(not_user_id=rec.service_id.create_uid, title='Survey Done')
+            group = self.env.ref('advicts_service_request_ticket.sr_cts_group', raise_if_not_found=False)
+            if group:
+                self._create_auto_activity(group, False, f'The Survey {rec.name} is done')
 
     def _create_auto_activity(self, group=False, not_user_id=False, title='Activity', message=''):
-        activity_type_id = self.env.ref('mail.mail_activity_data_todo').id
-        if group:
-            for user in group.users:
+        try:
+            activity_type_id = self.env.ref('mail.mail_activity_data_todo').id
+            if group:
+                for user in group.users:
+                    self.activity_schedule(
+                        'mail.mail_activity_data_todo',
+                        note=f'{message}',
+                        user_id=user.id,
+                        summary=_(f'{title}')
+                    )
+            elif not_user_id:
                 self.activity_schedule(
                     'mail.mail_activity_data_todo',
                     note=f'{message}',
-                    user_id=user.id,
+                    user_id=not_user_id.id,
                     summary=_(f'{title}')
                 )
-        elif not_user_id:
-            self.activity_schedule(
-                'mail.mail_activity_data_todo',
-                note=f'{message}',
-                user_id=not_user_id.id,
-                summary=_(f'{title}')
-            )
+        except Exception as e:
+            raise ValidationError(str(e))
 
 
 class SrSurveyLine(models.Model):

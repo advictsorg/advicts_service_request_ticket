@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_sr_reason_form" model="ir.ui.view">
+            <field name="name">sr.back.reason.form</field>
+            <field name="model">sr.back.reason</field>
+            <field name="arch" type="xml">
+                <form string="Back Reason">
+                    <sheet>
+                        <group>
+                            <field name="name"
+                                   required="1"
+                                   placeholder="Please enter your reason..."/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_save"
+                                string="Save"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="q"/>
+                        <button string="Cancel"
+                                class="btn-secondary"
+                                special="cancel"
+                                data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Window Action -->
+        <record id="action_sr_reason" model="ir.actions.act_window">
+            <field name="name">Enter Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sr.back.reason</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="model_service_request"/>
+            <field name="binding_view_types">form</field>
+        </record>
+    </data>
+</odoo>

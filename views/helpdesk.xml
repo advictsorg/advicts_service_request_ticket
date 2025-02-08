@@ -2,19 +2,19 @@
 <odoo>
     <template id="portal_my_tickets_inherit" inherit_id="advicts_advance_helpdesk.portal_my_tickets">
         <xpath expr="//select[@id='portal_priority']/.." position="replace">
-            <div t-attf-class="form-group">
-                <label class="control-label" for="portal_service_request">Service Impact</label>
-                <select class="form-control form-field o_website_form_required_custom" id="portal_service_request"
-                        name="portal_service_request">
-                    <option value="SR">Select SR</option>
-                    <t t-foreach="request.env['service.request'].sudo().search([('partner_id', '=', request.env.user.partner_id.id),('request_type', '=', 'request')])"
-                       t-as="sr">
-                        <option t-att-value="sr.id">
-                            <t t-esc="sr.service_name"/>
-                        </option>
-                    </t>
-                </select>
-            </div>
+<!--            <div t-attf-class="form-group">-->
+<!--                <label class="control-label" for="portal_service_request">Service Impact</label>-->
+<!--                <select class="form-control form-field o_website_form_required_custom" id="portal_service_request"-->
+<!--                        name="portal_service_request">-->
+<!--                    <option value="SR">Select SR</option>-->
+<!--                    <t t-foreach="request.env['service.request'].sudo().search([('partner_id', '=', request.env.user.partner_id.id),('request_type', '=', 'request')])"-->
+<!--                       t-as="sr">-->
+<!--                        <option t-att-value="sr.id">-->
+<!--                            <t t-esc="sr.service_name"/>-->
+<!--                        </option>-->
+<!--                    </t>-->
+<!--                </select>-->
+<!--            </div>-->
         </xpath>
     </template>
 
